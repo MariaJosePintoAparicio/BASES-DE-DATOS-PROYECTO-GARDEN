@@ -1,4 +1,4 @@
-# PROYECTO BASES DE DATOS
+# PROYECTO BASES DE DATOS GARDEN
 
 Crear base de datos:
 
