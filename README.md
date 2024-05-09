@@ -3659,103 +3659,412 @@ LEFT JOIN y NATURAL RIGHT JOIN.
     ```
 
 
-### Subconsultas con EXISTS y NOT EXISTS
+
+##### **Subconsultas con EXISTS y NOT EXISTS**
 
 18. Devuelve un listado que muestre solamente los clientes que no han
     realizado ningún pago.
 
+    ```sql
+    SELECT 
+        c.customer_name 
+    FROM 
+        customer AS c
+    WHERE 
+        NOT EXISTS (
+            SELECT 
+                p.customer_id
+            FROM 
+                pay AS p
+            WHERE
+                p.customer_id = c.customer_id
+        );
+    	
+    +-----------------------------+
+    | customer_name               |
+    +-----------------------------+
+    | Lasas S.A.                  |
+    | Club Golf Puerta del hierro |
+    | DaraDistribuciones          |
+    | Madrileña de riegos         |
+    | Lasas S.A.                  |
+    | Flowers, S.A                |
+    | Naturajardin                |
+    | Americh Golf Management SL  |
+    | Aloha                       |
+    | El Prat                     |
+    | Vivero Humanes              |
+    | Fuenla City                 |
+    | Top Campo                   |
+    | Campohermoso                |
+    | france telecom              |
+    | Musée du Louvre             |
+    | Flores S.L.                 |
+    | The Magic Garden            |
+    +-----------------------------+
+    18 rows in set (0.00 sec)
     ```
-    
-    ```
-
     
 19. Devuelve un listado que muestre solamente los clientes que sí han realizado
     algún pago.
 
+    ```sql
+    SELECT 
+        c.customer_name 
+    FROM 
+        customer AS c
+    WHERE 
+        EXISTS (
+            SELECT 
+                p.customer_id
+            FROM 
+                pay AS p
+            WHERE
+                p.customer_id = c.customer_id
+        );
+        
+    +--------------------------------+
+    | customer_name                  |
+    +--------------------------------+
+    | GoldFish Garden                |
+    | Gardening Associates           |
+    | Gerudo Valley                  |
+    | Tendo Garden                   |
+    | Beragua                        |
+    | Naturagua                      |
+    | Camunas Jardines S.L.          |
+    | Dardena S.A.                   |
+    | Jardin de Flores               |
+    | Flores Marivi                  |
+    | Golf S.A.                      |
+    | Sotogrande                     |
+    | Jardines y Mansiones Cactus SL |
+    | Jardinerías Matías SL          |
+    | Agrojardin                     |
+    | Jardineria Sara                |
+    | Tutifruti S.A                  |
+    | El Jardin Viviente S.L         |
+    +--------------------------------+
+    18 rows in set (0.00 sec)
     ```
-    
-    ```
-
     
 20. Devuelve un listado de los productos que nunca han aparecido en un
     pedido.
 
+    ```sql
+    SELECT product_code, product_name FROM show_products_nots;
+    +--------------+-------------------------------------------------------------+
+    | product_code | product_name                                                |
+    +--------------+-------------------------------------------------------------+
+    | OR-119       | Laurus Nobilis Arbusto - Ramificado Bajo                    |
+    | OR-125       | Viburnum Tinus "Eve Price"                                  |
+    | FR-16        | Calamondin Copa EXTRA Con FRUTA                             |
+    | OR-200       | Juniperus horizontalis Wiltonii                             |
+    | FR-78        | Higuera                                                     |
+    | FR-80        | Higuera                                                     |
+    | OR-146       | Bougamvillea Sanderiana Tutor                               |
+    | OR-150       | Bougamvillea roja, naranja                                  |
+    +--------------+-------------------------------------------------------------+
+    147 rows in set (0.00 sec)
     ```
-    
-    ```
-
     
 21. Devuelve un listado de los productos que han aparecido en un pedido
     alguna vez.
 
-    ```
+    ```sql
+    SELECT product_code, product_name FROM show_products_yes;
     
+    +--------------+-------------------------------------------------------------+
+    | product_code | product_name                                                |
+    +--------------+-------------------------------------------------------------+
+    | OR-238       | Livistonia Decipiens                                        |
+    | OR-239       | Livistonia Decipiens                                        |
+    | OR-242       | Rhaphis Excelsa                                             |
+    | OR-244       | Sabal Minor                                                 |
+    | OR-245       | Sabal Minor                                                 |
+    | OR-246       | Trachycarpus Fortunei                                       |
+    | OR-248       | Washingtonia Robusta                                        |
+    | OR-251       | Zamia Furfuracaea                                           |
+    +--------------+-------------------------------------------------------------+
+    129 rows in set (0.00 sec)
     ```
 
-    
+##### Subconsultas correlacionadas
 
-    #### Subconsultas correlacionadas
+#### Consultas variadas
 
-    ### Consultas variadas
-22. Devuelve el listado de clientes indicando el nombre del cliente y cuántos
+1. Devuelve el listado de clientes indicando el nombre del cliente y cuántos
    pedidos ha realizado. Tenga en cuenta que pueden existir clientes que no
    han realizado ningún pedido.
 
+   ```sql
+   SELECT 
+       c.customer_name , 
+       c.customer_surname , 
+       COUNT(o.order_code) AS pedidos_realizados
+   FROM 
+       customer AS c
+   LEFT JOIN 
+       `order` AS o ON o.customer_id  = c.customer_id 
+   GROUP BY 
+       c.customer_name, c.customer_surname;
+       
+    +--------------------------------+------------------+--------------------+
+   | customer_name                  | customer_surname | pedidos_realizados |
+   +--------------------------------+------------------+--------------------+
+   | Vivero Humanes                 | NULL             |                  0 |
+   | Fuenla City                    | NULL             |                  0 |
+   | Jardines y Mansiones Cactus SL | NULL             |                  5 |
+   | Jardinerías Matías SL          | NULL             |                  5 |
+   | Agrojardin                     | NULL             |                  5 |
+   | Top Campo                      | NULL             |                  0 |
+   | Jardineria Sara                | NULL             |                 10 |
+   | Campohermoso                   | NULL             |                  0 |
+   | france telecom                 | NULL             |                  0 |
+   | Musée du Louvre                | NULL             |                  0 |
+   | Tutifruti S.A                  | NULL             |                  5 |
+   | Flores S.L.                    | NULL             |                  5 |
+   | The Magic Garden               | NULL             |                  0 |
+   | El Jardin Viviente S.L         | NULL             |                  5 |
+   +--------------------------------+------------------+--------------------+
+   35 rows in set (0,00 sec)
+     
    ```
    
-   ```
-
-   
-23. Devuelve un listado con los nombres de los clientes y el total pagado por
+2. Devuelve un listado con los nombres de los clientes y el total pagado por
    cada uno de ellos. Tenga en cuenta que pueden existir clientes que no han
    realizado ningún pago.
 
+   ```sql
+   SELECT 
+       c.customer_name , 
+       c.customer_surname , 
+       COUNT(o.order_code) AS pedidos_realizados
+   FROM 
+       customer AS c
+   LEFT JOIN 
+       `order` AS o ON o.customer_id  = c.customer_id 
+   GROUP BY 
+       c.customer_name, c.customer_surname;
+       
+    +--------------------------------+------------------+--------------------+
+   | customer_name                  | customer_surname | pedidos_realizados |
+   +--------------------------------+------------------+--------------------+
+   | Vivero Humanes                 | NULL             |                  0 |
+   | Fuenla City                    | NULL             |                  0 |
+   | Jardines y Mansiones Cactus SL | NULL             |                  5 |
+   | Jardinerías Matías SL          | NULL             |                  5 |
+   | Agrojardin                     | NULL             |                  5 |
+   | Top Campo                      | NULL             |                  0 |
+   | Jardineria Sara                | NULL             |                 10 |
+   | Campohermoso                   | NULL             |                  0 |
+   | france telecom                 | NULL             |                  0 |
+   | Musée du Louvre                | NULL             |                  0 |
+   | Tutifruti S.A                  | NULL             |                  5 |
+   | Flores S.L.                    | NULL             |                  5 |
+   | The Magic Garden               | NULL             |                  0 |
+   | El Jardin Viviente S.L         | NULL             |                  5 |
+   +--------------------------------+------------------+--------------------+
+   35 rows in set (0,00 sec)
    ```
    
-   ```
-
-   
-24. Devuelve el nombre de los clientes que hayan hecho pedidos en 2008
+3. Devuelve el nombre de los clientes que hayan hecho pedidos en 2008
    ordenados alfabéticamente de menor a mayor.
 
-   ```
+   ```sql
+   SELECT 
+       c.customer_name , 
+       c.customer_surname 
+   FROM 
+       customer AS c
+   LEFT JOIN 
+       `order` AS o ON o.customer_id = c.customer_id 
+   WHERE 
+       YEAR(o.date_order) = 2008
+   ORDER BY 
+       c.customer_name , 
+       c.customer_surname;
+       
+   +--------------------------------+------------------+
+   | customer_name                  | customer_surname |
+   +--------------------------------+------------------+
+   | Camunas Jardines S.L.          | NULL             |
+   | GoldFish Garden                | NULL             |
+   | GoldFish Garden                | NULL             |
+   | GoldFish Garden                | NULL             |
+   | Jardin de Flores               | NULL             |
+   | Jardin de Flores               | NULL             |
+   | Jardines y Mansiones Cactus SL | NULL             |
+   | Jardines y Mansiones Cactus SL | NULL             |
+   | Jardines y Mansiones Cactus SL | NULL             |
+   | Jardines y Mansiones Cactus SL | NULL             |
+   | Jardines y Mansiones Cactus SL | NULL             |
+   | Tendo Garden                   | NULL             |
+   | Tendo Garden                   | NULL             |
+   | Tutifruti S.A                  | NULL             |
+   | Tutifruti S.A                  | NULL             |
+   | Tutifruti S.A                  | NULL             |
+   +--------------------------------+------------------+
+   34 rows in set (0,00 sec)
    
    ```
-
    
-25. Devuelve el nombre del cliente, el nombre y primer apellido de su
+4. Devuelve el nombre del cliente, el nombre y primer apellido de su
    representante de ventas y el número de teléfono de la oficina del
    representante de ventas, de aquellos clientes que no hayan realizado ningún
    pago.
 
-   ```
+   ```sql
+   SELECT 
+   	eom.customer_name AS 'Cliente',
+   	eom.employee_first_name AS 'Empleado',
+   	eom.office_phone_number AS 'Officina Numero'
+   FROM
+   	employee_office_meta AS eom
+   WHERE 
+   	N_pagos = 0
+   	AND 
+   	eom.customer_name  IS NOT NULL
+   	;
+   
+   +-----------------------------+--------------+-----------------+
+   | Cliente                     | Empleado     | Officina Numero |
+   +-----------------------------+--------------+-----------------+
+   | Club Golf Puerta del hierro | Emmanuel     | +34 93 3561182  |
+   | DaraDistribuciones          | Emmanuel     | +34 93 3561182  |
+   | Madrileña de riegos         | Emmanuel     | +34 93 3561182  |
+   | Americh Golf Management SL  | José Manuel  | +34 93 3561182  |
+   | Aloha                       | José Manuel  | +34 93 3561182  |
+   | El Prat                     | José Manuel  | +34 93 3561182  |
+   | Lasas S.A.                  | Mariano      | +34 91 7514487  |
+   | france telecom              | Lionel       | +33 14 723 4404 |
+   | Musée du Louvre             | Lionel       | +33 14 723 4404 |
+   | Flores S.L.                 | Michael      | +1 650 219 4782 |
+   | The Magic Garden            | Michael      | +1 650 219 4782 |
+   | Naturajardin                | Julian       | +61 2 9264 2451 |
+   | Vivero Humanes              | Julian       | +61 2 9264 2451 |
+   | Campohermoso                | Julian       | +61 2 9264 2451 |
+   | Flowers, S.A                | Felipe       | +34 925 867231  |
+   | Fuenla City                 | Felipe       | +34 925 867231  |
+   | Top Campo                   | Felipe       | +34 925 867231  |
+   +-----------------------------+--------------+-----------------+
+   17 rows in set (0,01 sec)
    
    ```
-
    
-26. Devuelve el listado de clientes donde aparezca el nombre del cliente, el
+5. Devuelve el listado de clientes donde aparezca el nombre del cliente, el
    nombre y primer apellido de su representante de ventas y la ciudad donde
    está su oficina.
 
-   ```
+   ```sql
+   SELECT 
+   	eom.customer_name AS 'Cliente',
+   	CONCAT(eom.employee_first_name, ' ',
+   	eom.employee_first_surname) AS 'Empleado',
+   	eom.city_name AS 'Officina Numero'
+   FROM
+   	employee_office_meta AS eom
+   WHERE 
+   	eom.customer_name  IS NOT NULL
+   	;
+   	
+   +--------------------------------+-------------------------+----------------------+
+   | Cliente                        | Empleado                | Ciudad               |
+   +--------------------------------+-------------------------+----------------------+
+   | Beragua                        | Emmanuel Magaña         | Barcelona            |
+   | Club Golf Puerta del hierro    | Emmanuel Magaña         | Barcelona            |
+   | Naturagua                      | Emmanuel Magaña         | Barcelona            |
+   | DaraDistribuciones             | Emmanuel Magaña         | Barcelona            |
+   | Jardin de Flores               | Julian Bellinelli       | Sydney               |
+   | Naturajardin                   | Julian Bellinelli       | Sydney               |
+   | Vivero Humanes                 | Julian Bellinelli       | Sydney               |
+   | Agrojardin                     | Julian Bellinelli       | Sydney               |
+   | Campohermoso                   | Julian Bellinelli       | Sydney               |
+   | Tutifruti S.A                  | Mariko Kishi            | Sydney               |
+   | El Jardin Viviente S.L         | Mariko Kishi            | Sydney               |
+   | Flores Marivi                  | Felipe Rosas            | Talavera de la Reina |
+   | Flowers, S.A                   | Felipe Rosas            | Talavera de la Reina |
+   | Fuenla City                    | Felipe Rosas            | Talavera de la Reina |
+   | Top Campo                      | Felipe Rosas            | Talavera de la Reina |
+   | Jardineria Sara                | Felipe Rosas            | Talavera de la Reina |
+   +--------------------------------+-------------------------+----------------------+
+   35 rows in set (0,00 sec)
    
    ```
-
    
-27. Devuelve el nombre, apellidos, puesto y teléfono de la oficina de aquellos
+6. Devuelve el nombre, apellidos, puesto y teléfono de la oficina de aquellos
    empleados que no sean representante de ventas de ningún cliente.
 
-   ```
+   ```sql
+   SELECT 
+   	CONCAT(eom.employee_first_name, ' ',
+   	eom.employee_first_surname) AS 'Empleado',
+   	eom.rol_name AS 'rol',
+   	eom.office_phone_number AS 'Numero'
+   FROM
+   	employee_office_meta AS eom
+   WHERE 
+   	eom.customer_name  IS NULL
+   	;
+   	
+   +-------------------+-----------------------+-----------------+
+   | Empleado          | rol                   | Numero          |
+   +-------------------+-----------------------+-----------------+
+   | David Palma       | Representante Ventas  | +34 93 3561182  |
+   | Oscar Palma       | Representante Ventas  | +34 93 3561182  |
+   | Hilary Washington | Director Oficina      | +1 215 837 0825 |
+   | Marcus Paxton     | Representante Ventas  | +1 215 837 0825 |
+   | Amy Johnson       | Director Oficina      | +44 20 78772041 |
+   | Larry Westfalls   | Representante Ventas  | +44 20 78772041 |
+   | John Walton       | Representante Ventas  | +44 20 78772041 |
+   | Carlos Soria      | Director Oficina      | +34 91 7514487  |
+   | Hilario Rodriguez | Representante Ventas  | +34 91 7514487  |
+   | Francois Fignon   | Director Oficina      | +33 14 723 4404 |
+   | Laurent Serra     | Representante Ventas  | +33 14 723 4404 |
+   | Kevin Fallmer     | Director Oficina      | +61 2 9264 2451 |
+   | Marcos Magaña     | Director General      | +34 925 867231  |
+   | Ruben López       | Subdirector Marketing | +34 925 867231  |
+   | Alberto Soria     | Subdirector Ventas    | +34 925 867231  |
+   | Maria Solís       | Secretaria            | +34 925 867231  |
+   | Juan Carlos Ortiz | Representante Ventas  | +34 925 867231  |
+   | Nei Nishikori     | Director Oficina      | +81 33 224 5000 |
+   | Narumi Riko       | Representante Ventas  | +81 33 224 5000 |
+   | Takuma Nomura     | Representante Ventas  | +81 33 224 5000 |
+   +-------------------+-----------------------+-----------------+
+   20 rows in set (0,00 sec)
    
    ```
-
    
-
-28. Devuelve un listado indicando todas las ciudades donde hay oficinas y el
+7. Devuelve un listado indicando todas las ciudades donde hay oficinas y el
    número de empleados que tiene.
 
-   ```
+   ```sql
+   SELECT
+   	cy.city_name AS ciudad_oficina, 
+   	COUNT(c.customer_id) AS total_empleados
+   FROM 
+   	office AS o
+   INNER JOIN 
+   	city AS cy ON cy.city_id = o.city_id
+   INNER JOIN 
+   	employee AS e ON e.office_id = o.office_id 
+   INNER JOIN 
+   	customer AS c ON c.employee_id = e.employee_id 
+   GROUP BY 
+   	cy.city_name;
+   
+   +----------------------+-----------------+
+   | ciudad_oficina       | total_empleados |
+   +----------------------+-----------------+
+   | Talavera de la Reina |               5 |
+   | Madrid               |               6 |
+   | Barcelona            |              10 |
+   | Paris                |               2 |
+   | San Francisco        |               4 |
+   | Boston               |               2 |
+   | Sydney               |               7 |
+   +----------------------+-----------------+
+   7 rows in set (0,01 sec)
    
    ```
 
-   
