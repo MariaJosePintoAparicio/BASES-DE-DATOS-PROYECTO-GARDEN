@@ -1,3 +1,83 @@
+
+-- Datos de prueba para la tabla gama_product
+INSERT INTO `garden`.`gama_product` (`gama_product_id`, `description`, `description_html`, `image`) VALUES
+('GP001', 'Plantas de exterior', '<p>Plantas para jardines y terrazas.</p>', 'plantas_exterior.jpg'),
+('GP002', 'Plantas de interior', '<p>Plantas ideales para decorar el interior del hogar.</p>', 'plantas_interior.jpg'),
+('GP003', 'Herramientas de jardinería', '<p>Todo lo necesario para el cuidado y mantenimiento del jardín.</p>', 'herramientas_jardineria.jpg');
+
+-- Datos de prueba para la tabla product
+INSERT INTO `garden`.`product` (`product_code`, `product_name`, `description`, `stock_amount`, `price_sell`, `gama`, `height`, `width`, `length`, `weight`) VALUES
+('P001', 'Rosa roja', 'Rosa roja natural de alta calidad.', 50, 12.99, 'GP001', 40, 20, 20, 0.5),
+('P002', 'Ficus lyrata', 'Ficus lyrata también conocido como Fiddle Leaf Fig.', 30, 29.99, 'GP002', 120, 40, 40, 4.5),
+('P003', 'Pala de jardín', 'Pala de jardín resistente y duradera.', 100, 9.99, 'GP003', NULL, NULL, NULL, NULL);
+
+-- Datos de prueba para la tabla provider
+INSERT INTO `garden`.`provider` (`provider_id`, `provider_name`, `provider_surname`) VALUES
+(1, 'Proveedor1', 'Apellido1'),
+(2, 'Proveedor2', 'Apellido2'),
+(3, 'Proveedor3', 'Apellido3');
+
+-- Datos de prueba para la tabla provider_product
+INSERT INTO `garden`.`provider_product` (`provider_id`, `new_price`, `old_price`, `product_code`) VALUES
+(1, 10.99, 12.99, 'P001'),
+(2, 25.99, 29.99, 'P002'),
+(3, 8.99, 9.99, 'P003');
+
+-- Datos de prueba para la tabla rol
+INSERT INTO `garden`.`rol` (`rol_id`, `rol_name`, `showProducts`, `actived`, `created_at`, `updated_at`) VALUES
+(1, 'Administrador', 1, 1, NOW(), NOW()),
+(2, 'Empleado', 1, 1, NOW(), NOW()),
+(3, 'Cliente', 1, 1, NOW(), NOW());
+
+-- Datos de prueba para la tabla country
+INSERT INTO `garden`.`country` (`country_id`, `country_name`) VALUES
+(1, 'Country1'),
+(2, 'Country2'),
+(3, 'Country3');
+
+-- Datos de prueba para la tabla region
+INSERT INTO `garden`.`region` (`region_id`, `region_name`, `country_id`) VALUES
+(1, 'Region1', 1),
+(2, 'Region2', 2),
+(3, 'Region3', 3);
+
+-- Datos de prueba para la tabla city
+INSERT INTO `garden`.`city` (`city_id`, `city_name`, `postal_code`, `region_id`) VALUES
+(1, 'City1', 'CP001', 1),
+(2, 'City2', 'CP002', 2),
+(3, 'City3', 'CP003', 3);
+
+-- Datos de prueba para la tabla office
+INSERT INTO `garden`.`office` (`office_id`, `office_phone_number`, `address_line_1`, `address_line_2`, `city_id`, `main_office_id`) VALUES
+('O001', '123456789', 'Calle Principal 123', 'Piso 2', 1, NULL),
+('O002', '987654321', 'Avenida Secundaria 456', 'Local 5', 2, 'O001'),
+('O003', '456123789', 'Carrera Terciaria 789', NULL, 3, 'O001');
+
+-- Datos de prueba para la tabla employee
+INSERT INTO `garden`.`employee` (`employee_id`, `employee_first_name`, `employee_last_name`, `employee_first_surname`, `employee_last_surname`, `employee_extension`, `employee_email`, `boss_id`, `rol_id`, `actived`, `created_at`, `updated_at`, `office_id`) VALUES
+(1, 'Empleado1', 'Apellido1', 'Apellido1', NULL, NULL, 'empleado1@empresa.com', NULL, 2, 1, NOW(), NOW(), 'O001'),
+(2, 'Empleado2', 'Apellido2', 'Apellido2', NULL, NULL, 'empleado2@empresa.com', 1, 2, 1, NOW(), NOW(), 'O001'),
+(3, 'Empleado3', 'Apellido3', 'Apellido3', NULL, NULL, 'empleado3@empresa.com', 1, 2, 1, NOW(), NOW(), 'O002');
+
+-- Datos de prueba para la tabla customer
+INSERT INTO `garden`.`customer` (`customer_id`, `customer_name`, `customer_surname`, `credit_limit`, `employee_id`, `customer_email`) VALUES
+(1, 'Cliente1', 'Apellido1', 500.00, 1, 'cliente1@empresa.com'),
+(2, 'Cliente2', 'Apellido2', 1000.00, 1, 'cliente2@empresa.com'),
+(3, 'Cliente3', 'Apellido3', 750.00, 2, 'cliente3@empresa.com');
+
+-- Datos de prueba para la tabla address
+INSERT INTO `garden`.`address` (`address_id`, `address_line_1`, `address_line_2`, `address_type`, `city_id`, `provider_id`, `customer_id`, `employee_id`) VALUES
+(1, 'Calle Principal 123', 'Piso 2', 'Principal', 1, NULL, NULL, 1),
+(2, 'Avenida Secundaria 456', 'Local 5', 'Secundaria', 2, NULL, NULL, 2),
+(3, 'Carrera Terciaria 789', NULL, 'Terciaria', 3, NULL, NULL, 3);
+
+-- Datos de prueba para la tabla customer_contact
+INSERT INTO `garden`.`customer_contact` (`customer_contact_id`, `cc_first_name`, `cc_last_name`, `cc_first_surname`, `cc_last_surname`, `customer_contact_type`, `customer_id`) VALUES
+(1, 'Contacto1', 'Apellido1', NULL, NULL, 'Principal', 1),
+(2, 'Contacto2', 'Apellido2', NULL, NULL, 'Principal', 2),
+(3, 'Contacto3', 'Apellido3', NULL, NULL, 'Principal', 3);
+
+
 USE garden;
 
 -- Datos
@@ -797,6 +877,84 @@ CALL add_detalle_pedido (124,'FR-67',10,70,1);
 CALL add_detalle_pedido (125,'FR-67',10,70,1);
 CALL add_detalle_pedido (126,'FR-67',10,70,1);
 CALL add_detalle_pedido (127,'FR-67',10,70,1);
+-- Datos de prueba para la tabla gama_product
+INSERT INTO `garden`.`gama_product` (`gama_product_id`, `description`, `description_html`, `image`) VALUES
+('GP001', 'Plantas de exterior', '<p>Plantas para jardines y terrazas.</p>', 'plantas_exterior.jpg'),
+('GP002', 'Plantas de interior', '<p>Plantas ideales para decorar el interior del hogar.</p>', 'plantas_interior.jpg'),
+('GP003', 'Herramientas de jardinería', '<p>Todo lo necesario para el cuidado y mantenimiento del jardín.</p>', 'herramientas_jardineria.jpg');
+
+-- Datos de prueba para la tabla product
+INSERT INTO `garden`.`product` (`product_code`, `product_name`, `description`, `stock_amount`, `price_sell`, `gama`, `height`, `width`, `length`, `weight`) VALUES
+('P001', 'Rosa roja', 'Rosa roja natural de alta calidad.', 50, 12.99, 'GP001', 40, 20, 20, 0.5),
+('P002', 'Ficus lyrata', 'Ficus lyrata también conocido como Fiddle Leaf Fig.', 30, 29.99, 'GP002', 120, 40, 40, 4.5),
+('P003', 'Pala de jardín', 'Pala de jardín resistente y duradera.', 100, 9.99, 'GP003', NULL, NULL, NULL, NULL);
+
+-- Datos de prueba para la tabla provider
+INSERT INTO `garden`.`provider` (`provider_id`, `provider_name`, `provider_surname`) VALUES
+(1, 'Proveedor1', 'Apellido1'),
+(2, 'Proveedor2', 'Apellido2'),
+(3, 'Proveedor3', 'Apellido3');
+
+-- Datos de prueba para la tabla provider_product
+INSERT INTO `garden`.`provider_product` (`provider_id`, `new_price`, `old_price`, `product_code`) VALUES
+(1, 10.99, 12.99, 'P001'),
+(2, 25.99, 29.99, 'P002'),
+(3, 8.99, 9.99, 'P003');
+
+-- Datos de prueba para la tabla rol
+INSERT INTO `garden`.`rol` (`rol_id`, `rol_name`, `showProducts`, `actived`, `created_at`, `updated_at`) VALUES
+(1, 'Administrador', 1, 1, NOW(), NOW()),
+(2, 'Empleado', 1, 1, NOW(), NOW()),
+(3, 'Cliente', 1, 1, NOW(), NOW());
+
+-- Datos de prueba para la tabla country
+INSERT INTO `garden`.`country` (`country_id`, `country_name`) VALUES
+(1, 'Country1'),
+(2, 'Country2'),
+(3, 'Country3');
+
+-- Datos de prueba para la tabla region
+INSERT INTO `garden`.`region` (`region_id`, `region_name`, `country_id`) VALUES
+(1, 'Region1', 1),
+(2, 'Region2', 2),
+(3, 'Region3', 3);
+
+-- Datos de prueba para la tabla city
+INSERT INTO `garden`.`city` (`city_id`, `city_name`, `postal_code`, `region_id`) VALUES
+(1, 'City1', 'CP001', 1),
+(2, 'City2', 'CP002', 2),
+(3, 'City3', 'CP003', 3);
+
+-- Datos de prueba para la tabla office
+INSERT INTO `garden`.`office` (`office_id`, `office_phone_number`, `address_line_1`, `address_line_2`, `city_id`, `main_office_id`) VALUES
+('O001', '123456789', 'Calle Principal 123', 'Piso 2', 1, NULL),
+('O002', '987654321', 'Avenida Secundaria 456', 'Local 5', 2, 'O001'),
+('O003', '456123789', 'Carrera Terciaria 789', NULL, 3, 'O001');
+
+-- Datos de prueba para la tabla employee
+INSERT INTO `garden`.`employee` (`employee_id`, `employee_first_name`, `employee_last_name`, `employee_first_surname`, `employee_last_surname`, `employee_extension`, `employee_email`, `boss_id`, `rol_id`, `actived`, `created_at`, `updated_at`, `office_id`) VALUES
+(1, 'Empleado1', 'Apellido1', 'Apellido1', NULL, NULL, 'empleado1@empresa.com', NULL, 2, 1, NOW(), NOW(), 'O001'),
+(2, 'Empleado2', 'Apellido2', 'Apellido2', NULL, NULL, 'empleado2@empresa.com', 1, 2, 1, NOW(), NOW(), 'O001'),
+(3, 'Empleado3', 'Apellido3', 'Apellido3', NULL, NULL, 'empleado3@empresa.com', 1, 2, 1, NOW(), NOW(), 'O002');
+
+-- Datos de prueba para la tabla customer
+INSERT INTO `garden`.`customer` (`customer_id`, `customer_name`, `customer_surname`, `credit_limit`, `employee_id`, `customer_email`) VALUES
+(1, 'Cliente1', 'Apellido1', 500.00, 1, 'cliente1@empresa.com'),
+(2, 'Cliente2', 'Apellido2', 1000.00, 1, 'cliente2@empresa.com'),
+(3, 'Cliente3', 'Apellido3', 750.00, 2, 'cliente3@empresa.com');
+
+-- Datos de prueba para la tabla address
+INSERT INTO `garden`.`address` (`address_id`, `address_line_1`, `address_line_2`, `address_type`, `city_id`, `provider_id`, `customer_id`, `employee_id`) VALUES
+(1, 'Calle Principal 123', 'Piso 2', 'Principal', 1, NULL, NULL, 1),
+(2, 'Avenida Secundaria 456', 'Local 5', 'Secundaria', 2, NULL, NULL, 2),
+(3, 'Carrera Terciaria 789', NULL, 'Terciaria', 3, NULL, NULL, 3);
+
+-- Datos de prueba para la tabla customer_contact
+INSERT INTO `garden`.`customer_contact` (`customer_contact_id`, `cc_first_name`, `cc_last_name`, `cc_first_surname`, `cc_last_surname`, `customer_contact_type`, `customer_id`) VALUES
+(1, 'Contacto1', 'Apellido1', NULL, NULL, 'Principal', 1),
+(2, 'Contacto2', 'Apellido2', NULL, NULL, 'Principal', 2),
+(3, 'Contacto3', 'Apellido3', NULL, NULL, 'Principal', 3);
+
 
 CALL add_pago (1,'PayPal','ak-std-000001','2008-11-10',2000);
 CALL add_pago (1,'PayPal','ak-std-000002','2008-12-10',2000);
